@@ -40,6 +40,14 @@ for (const prefix of ["const number =","function setBusy(","function updateSetti
 function loadAsync(name) {const start=source.indexOf(`  async function ${name}`);assert(start>=0);vm.runInContext(source.slice(start,source.indexOf("\n  function ",start+2)),context);}
 loadAsync("importFiles");loadAsync("runScenario");
 
+const exportStart = source.indexOf("  function hostedExport(");
+vm.runInContext(source.slice(exportStart, source.indexOf("  function download(", exportStart)), context);
+const exportResult = {proposed:{suggestions:[{pallet_id:"=DANGEROUS",reason:'quoted "reason"',score_components:{t_saved:60}}]}};
+assert.equal(JSON.parse(context.hostedExport(exportResult,"json")).proposed.suggestions[0].pallet_id,"=DANGEROUS");
+const csvExport = context.hostedExport(exportResult,"csv");
+assert(csvExport.includes("'=DANGEROUS"),"Hosted CSV neutralizes formula injection");
+assert(csvExport.includes('quoted ""reason""'),"Hosted CSV escapes quotes");
+
 async function main() {
   context.setBusy(true);
   assert([...controls,stepButton,nodes["run-button"]].every((control) => control.disabled),"Busy scenario must lock inputs and step controls");

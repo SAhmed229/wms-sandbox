@@ -69,6 +69,14 @@ class SandboxHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(payload)
 
+    def _store_run(self, result):
+        encoded = json_bytes(result)
+        with tempfile.NamedTemporaryFile(dir=self.server.data_dir, prefix=".run-", suffix=".tmp", delete=False) as file:
+            file.write(encoded)
+            temp_path = Path(file.name)
+        os.replace(temp_path, self.server.data_dir / (result["run_id"] + ".json"))
+        return encoded
+
     def _error(self, message, status=400, details=None):
         self._send({"error": message, "details": details or []}, status)
 
@@ -179,11 +187,7 @@ class SandboxHandler(BaseHTTPRequestHandler):
                     result = run_comparison(dataset, settings)
                     result.update({"run_id": uuid.uuid4().hex, "created_at": datetime.now(timezone.utc).isoformat(),
                                    "dataset": dataset, "dataset_summary": summarize(dataset)})
-                    encoded = json_bytes(result)
-                    with tempfile.NamedTemporaryFile(dir=self.server.data_dir, prefix=".run-", suffix=".tmp", delete=False) as file:
-                        file.write(encoded)
-                        temp_path = Path(file.name)
-                    os.replace(temp_path, self.server.data_dir / (result["run_id"] + ".json"))
+                    encoded = self._store_run(result)
                     return self._send(encoded)
                 finally:
                     RUN_LOCK.release()

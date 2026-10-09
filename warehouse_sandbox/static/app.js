@@ -68,7 +68,7 @@
   function settings() { const result = {}; for (const input of $("scenario-form").querySelectorAll("input[name]")) result[input.name] = Number(input.value); return result; }
   async function runScenario(event) {
     event.preventDefault(); if (!state.dataset || state.busy) return; pause(); setBusy(true); notice("Running both branches with identical warehouse inputs…");
-    try {state.result = await request("/api/run", {dataset: state.dataset, settings: settings()}); state.time = 0; state.branch = "proposed"; renderResults(); showTab("results"); history.replaceState({}, "", `/?run=${encodeURIComponent(state.result.run_id)}`); notice(`Comparison complete: ${number(state.result.baseline.metrics.truck_count)} baseline shipments and ${number(state.result.proposed.metrics.truck_count)} proposed shipments.`);}
+    try {state.result = await request("/api/run", {dataset: state.dataset, settings: settings()}); state.time = 0; state.branch = "proposed"; renderResults(); showTab("results"); history.replaceState({}, "", state.result.storage_mode === "browser" ? "/" : `/?run=${encodeURIComponent(state.result.run_id)}`); notice(`Comparison complete: ${number(state.result.baseline.metrics.truck_count)} baseline shipments and ${number(state.result.proposed.metrics.truck_count)} proposed shipments.`);}
     catch (error) {notice(error.message, true, error.details);} finally {setBusy(false);}
   }
   function renderResults() {
@@ -175,7 +175,21 @@
   }
   function pause() {state.playing = false; state.lastFrame = null; if (state.frame) cancelAnimationFrame(state.frame); state.frame = null; $("play-button").textContent = "Play"; $("play-button").setAttribute("aria-label", "Play replay");}
   function play() {if (!state.result) return; if (state.playing) {pause(); return;} if (state.time >= Number($("timeline-slider").max)) state.time = 0; state.playing = true; state.lastFrame = null; $("play-button").textContent = "Pause"; $("play-button").setAttribute("aria-label", "Pause replay"); const tick = (timestamp) => {if (!state.playing) return; if (state.lastFrame !== null) state.time = Math.min(Number($("timeline-slider").max), state.time + (timestamp - state.lastFrame) / 1000 * Number($("playback-speed").value)); state.lastFrame = timestamp; if (timestamp - state.lastPaint > 70 || state.time >= Number($("timeline-slider").max)) {renderReplay(); state.lastPaint = timestamp;} if (state.time >= Number($("timeline-slider").max)) pause(); else state.frame = requestAnimationFrame(tick);}; state.frame = requestAnimationFrame(tick); }
-  function download(format) {if (!state.result?.run_id) return; const a = element("a"); a.href = `/api/runs/${encodeURIComponent(state.result.run_id)}/export?format=${format}`; a.download = `warehouse-replay-${state.result.run_id}.${format}`; document.body.append(a); a.click(); a.remove();}
+  function hostedExport(result, format) {
+    if (format === "json") return JSON.stringify(result, null, 2);
+    const fields = ["id", "at_seconds", "pallet_id", "sku_id", "owner_id", "order_id", "from_location_id", "to_location_id", "dock_id", "estimated_load_travel_saved_seconds", "move_cost_seconds", "score", "score_components", "policy_source", "adopted", "reason"];
+    const cell = (value) => {let text = typeof value === "object" && value !== null ? JSON.stringify(value) : String(value ?? ""); if (/^[=+@\-\t\r]/.test(text)) text = "'" + text; return '"' + text.replace(/"/g, '""') + '"';};
+    return [fields.join(","), ...result.proposed.suggestions.map((row) => fields.map((field) => cell(row[field])).join(","))].join("\r\n");
+  }
+  function download(format) {
+    if (!state.result?.run_id) return;
+    const a = element("a"), hosted = state.result.storage_mode === "browser";
+    const objectUrl = hosted ? URL.createObjectURL(new Blob([hostedExport(state.result, format)], {type: format === "json" ? "application/json" : "text/csv;charset=utf-8"})) : null;
+    a.href = objectUrl || `/api/runs/${encodeURIComponent(state.result.run_id)}/export?format=${format}`;
+    a.download = `warehouse-replay-${state.result.run_id}.${format}`;
+    document.body.append(a); a.click(); a.remove();
+    if (objectUrl) setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+  }
 
   $("demo-button").addEventListener("click", loadDemo); $("dataset-files").addEventListener("change", importFiles); $("scenario-form").addEventListener("submit", runScenario); $("baseline-toggle").addEventListener("click", () => setBranch("baseline")); $("proposed-toggle").addEventListener("click", () => setBranch("proposed")); $("play-button").addEventListener("click", play); $("reset-replay").addEventListener("click", () => {pause(); state.time = 0; renderReplay();}); $("timeline-slider").addEventListener("input", () => {pause(); state.time = Number($("timeline-slider").value); renderReplay();}); $("export-csv").addEventListener("click", () => download("csv")); $("export-json").addEventListener("click", () => download("json"));
   $("change-data-button").addEventListener("click", () => showTab("model",true));

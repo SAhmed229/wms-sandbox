@@ -76,3 +76,11 @@ The source repository's commercial reuse rights have not been established by thi
 The Phase 1 scorer ranks suggestions with the repository value function V(m) = (T_saved * P_load * W_order) / (C_move + C_opportunity). Its source movement cost excludes empty travel to reach the pallet; full replay task cost includes it. The original scheduler threshold defaults to 0.1 and is adjustable as Minimum optimizer score. Optional order priority is an integer from 1 to 10, default 1.
 
 The desktop copy of src/scoring/value_function.py has two intentional replay adaptations: an optional injected clock and an overflow guard for its urgency exponential. The original checkout remains unchanged. Integration tests verify the actual generator, feasibility engine and scorer execute and that changing original source scores changes recommendation ranking.
+
+## Vercel hosting
+
+Import this repository with root directory `.` and the Flask framework preset. The root `app.py`, `requirements.txt`, `.python-version`, and `vercel.json` configure the hosted API and UI. Git pushes redeploy the connected project.
+
+The hosted app executes the same original Phase 1 optimizer. Runs remain in the current page; download JSON or CSV before refreshing or closing. JSON can be imported again to rerun a scenario. There is no shared server run history or persistent uploaded-data storage. Hosted uploads are limited to 4 MB. The desktop launcher continues saving results locally.
+
+Use Vercel Deployment Protection for a private pilot. This MVP has no customer accounts or tenant access controls; use synthetic data on an unprotected public deployment.
