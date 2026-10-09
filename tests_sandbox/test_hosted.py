@@ -21,7 +21,7 @@ class HostedUserFlowTests(unittest.TestCase):
         self.assertEqual(result["policy"]["id"], "original_optimizer_phase1")
         self.assertEqual(result["proposed"]["metrics"]["truck_count"], 8)
         restored = self.client.post("/api/import", json={"data": result}).get_json()
-        self.assertEqual(restored["dataset"], demo)
+        self.assertEqual(restored["dataset"], result["dataset"])
         self.assertEqual(self.client.get("/api/runs/" + result["run_id"]).status_code, 410)
 
     def test_origin_and_input_boundaries(self):
