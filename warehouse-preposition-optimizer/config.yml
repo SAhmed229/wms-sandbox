@@ -1,0 +1,45 @@
+scoring:
+  weights:
+    load_probability: 0.1658
+    movement_cost: 0.0646
+    opportunity_cost: 0.0646
+    order_priority: 0.2628
+    time_saved: 0.4423
+  decay_constant_seconds: 3600
+  max_candidates_per_cycle: 50
+  min_score_threshold: 0.01
+
+scheduling:
+  cycle_interval_seconds: 60
+  dispatch_batch_size: 5
+  task_expiry_minutes: 15
+  horizon_hours: 24
+
+resources:
+  forklift_speed_mps: 2.2
+  agv_speed_mps: 1.3
+  handling_time_seconds: 45
+  max_utilization: 0.95
+
+constraints:
+  enforce_temperature: true
+  enforce_hazmat: true
+  enforce_capacity: true
+  max_staging_distance_meters: 50
+
+prediction:
+  enabled: true
+  model_path: models/demand_lgbm.pkl
+  fallback_on_error: true
+  prediction_cache_ttl_seconds: 300
+
+optimization:
+  enabled: false
+  solver_timeout_seconds: 10
+  route_optimization: false
+
+wms:
+  adapter: generic_db
+  poll_interval_seconds: 30
+  cache_ttl_seconds: 60
+  connection_string: ${DATABASE_URL}

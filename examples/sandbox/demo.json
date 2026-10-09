@@ -1,0 +1,544 @@
+{
+  "schema_version": "1.0",
+  "facility": {
+    "name": "Northside Distribution \u00b7 synthetic demo",
+    "start_time": "2026-09-14T06:00:00-04:00"
+  },
+  "locations": [
+    {
+      "id": "S-01",
+      "x": 65,
+      "y": 12,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-02",
+      "x": 90,
+      "y": 12,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-03",
+      "x": 115,
+      "y": 12,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-04",
+      "x": 65,
+      "y": 32,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-05",
+      "x": 90,
+      "y": 32,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-06",
+      "x": 115,
+      "y": 32,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-07",
+      "x": 65,
+      "y": 52,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-08",
+      "x": 90,
+      "y": 52,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-09",
+      "x": 115,
+      "y": 52,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-10",
+      "x": 65,
+      "y": 72,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-11",
+      "x": 90,
+      "y": 72,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "S-12",
+      "x": 115,
+      "y": 72,
+      "kind": "storage",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "STAGE-A",
+      "x": 12,
+      "y": 15,
+      "kind": "staging",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "STAGE-B",
+      "x": 12,
+      "y": 65,
+      "kind": "staging",
+      "capacity_pallets": 4,
+      "temperature": "ambient"
+    },
+    {
+      "id": "DOOR-A",
+      "x": 0,
+      "y": 15,
+      "kind": "dock",
+      "capacity_pallets": 1,
+      "temperature": "ambient"
+    },
+    {
+      "id": "DOOR-B",
+      "x": 0,
+      "y": 65,
+      "kind": "dock",
+      "capacity_pallets": 1,
+      "temperature": "ambient"
+    }
+  ],
+  "docks": [
+    {
+      "id": "DOCK-A",
+      "location_id": "DOOR-A",
+      "staging_location_id": "STAGE-A"
+    },
+    {
+      "id": "DOCK-B",
+      "location_id": "DOOR-B",
+      "staging_location_id": "STAGE-B"
+    }
+  ],
+  "forklifts": [
+    {
+      "id": "FORK-1",
+      "start_location_id": "DOOR-A"
+    },
+    {
+      "id": "FORK-2",
+      "start_location_id": "DOOR-B"
+    },
+    {
+      "id": "FORK-3",
+      "start_location_id": "DOOR-A"
+    }
+  ],
+  "inventory": [
+    {
+      "pallet_id": "PAL-001",
+      "sku_id": "SKU-001",
+      "owner_id": "ACME",
+      "location_id": "S-01",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-002",
+      "sku_id": "SKU-002",
+      "owner_id": "NOVA",
+      "location_id": "S-02",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-003",
+      "sku_id": "SKU-003",
+      "owner_id": "ACME",
+      "location_id": "S-03",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-004",
+      "sku_id": "SKU-004",
+      "owner_id": "NOVA",
+      "location_id": "S-04",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-005",
+      "sku_id": "SKU-005",
+      "owner_id": "ACME",
+      "location_id": "S-05",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-006",
+      "sku_id": "SKU-006",
+      "owner_id": "NOVA",
+      "location_id": "S-06",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-007",
+      "sku_id": "SKU-001",
+      "owner_id": "ACME",
+      "location_id": "S-07",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-008",
+      "sku_id": "SKU-002",
+      "owner_id": "NOVA",
+      "location_id": "S-08",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-009",
+      "sku_id": "SKU-003",
+      "owner_id": "ACME",
+      "location_id": "S-09",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-010",
+      "sku_id": "SKU-004",
+      "owner_id": "NOVA",
+      "location_id": "S-10",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-011",
+      "sku_id": "SKU-005",
+      "owner_id": "ACME",
+      "location_id": "S-11",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-012",
+      "sku_id": "SKU-006",
+      "owner_id": "NOVA",
+      "location_id": "S-12",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-013",
+      "sku_id": "SKU-001",
+      "owner_id": "ACME",
+      "location_id": "S-01",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-014",
+      "sku_id": "SKU-002",
+      "owner_id": "NOVA",
+      "location_id": "S-02",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-015",
+      "sku_id": "SKU-003",
+      "owner_id": "ACME",
+      "location_id": "S-03",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-016",
+      "sku_id": "SKU-004",
+      "owner_id": "NOVA",
+      "location_id": "S-04",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-017",
+      "sku_id": "SKU-005",
+      "owner_id": "ACME",
+      "location_id": "S-05",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-018",
+      "sku_id": "SKU-006",
+      "owner_id": "NOVA",
+      "location_id": "S-06",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-019",
+      "sku_id": "SKU-001",
+      "owner_id": "ACME",
+      "location_id": "S-07",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-020",
+      "sku_id": "SKU-002",
+      "owner_id": "NOVA",
+      "location_id": "S-08",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-021",
+      "sku_id": "SKU-003",
+      "owner_id": "ACME",
+      "location_id": "S-09",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-022",
+      "sku_id": "SKU-004",
+      "owner_id": "NOVA",
+      "location_id": "S-10",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-023",
+      "sku_id": "SKU-005",
+      "owner_id": "ACME",
+      "location_id": "S-11",
+      "quantity": 20,
+      "temperature": "ambient"
+    },
+    {
+      "pallet_id": "PAL-024",
+      "sku_id": "SKU-006",
+      "owner_id": "NOVA",
+      "location_id": "S-12",
+      "quantity": 20,
+      "temperature": "ambient"
+    }
+  ],
+  "orders": [
+    {
+      "order_id": "OUT-001",
+      "owner_id": "ACME",
+      "release_seconds": 0,
+      "arrival_seconds": 1200,
+      "deadline_seconds": 1500,
+      "dock_id": "DOCK-A",
+      "lines": [
+        {
+          "pallet_id": "PAL-001",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-003",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-005",
+          "quantity": 20
+        }
+      ],
+      "scheduled_arrival_seconds": 1200
+    },
+    {
+      "order_id": "OUT-002",
+      "owner_id": "NOVA",
+      "release_seconds": 0,
+      "arrival_seconds": 1320,
+      "deadline_seconds": 1620,
+      "dock_id": "DOCK-A",
+      "lines": [
+        {
+          "pallet_id": "PAL-002",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-004",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-006",
+          "quantity": 20
+        }
+      ],
+      "scheduled_arrival_seconds": 1260
+    },
+    {
+      "order_id": "OUT-003",
+      "owner_id": "ACME",
+      "release_seconds": 0,
+      "arrival_seconds": 1380,
+      "deadline_seconds": 1680,
+      "dock_id": "DOCK-B",
+      "lines": [
+        {
+          "pallet_id": "PAL-007",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-009",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-011",
+          "quantity": 20
+        }
+      ],
+      "scheduled_arrival_seconds": 1260
+    },
+    {
+      "order_id": "OUT-004",
+      "owner_id": "NOVA",
+      "release_seconds": 0,
+      "arrival_seconds": 1500,
+      "deadline_seconds": 1800,
+      "dock_id": "DOCK-B",
+      "lines": [
+        {
+          "pallet_id": "PAL-008",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-010",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-012",
+          "quantity": 20
+        }
+      ],
+      "scheduled_arrival_seconds": 1500
+    },
+    {
+      "order_id": "OUT-005",
+      "owner_id": "ACME",
+      "release_seconds": 1200,
+      "arrival_seconds": 3000,
+      "deadline_seconds": 3300,
+      "dock_id": "DOCK-A",
+      "lines": [
+        {
+          "pallet_id": "PAL-013",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-015",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-017",
+          "quantity": 20
+        }
+      ],
+      "scheduled_arrival_seconds": 2940
+    },
+    {
+      "order_id": "OUT-006",
+      "owner_id": "NOVA",
+      "release_seconds": 1320,
+      "arrival_seconds": 3120,
+      "deadline_seconds": 3420,
+      "dock_id": "DOCK-B",
+      "lines": [
+        {
+          "pallet_id": "PAL-014",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-016",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-018",
+          "quantity": 20
+        }
+      ],
+      "scheduled_arrival_seconds": 3000
+    },
+    {
+      "order_id": "OUT-007",
+      "owner_id": "ACME",
+      "release_seconds": 2700,
+      "arrival_seconds": 4500,
+      "deadline_seconds": 4800,
+      "dock_id": "DOCK-A",
+      "lines": [
+        {
+          "pallet_id": "PAL-019",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-021",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-023",
+          "quantity": 20
+        }
+      ],
+      "scheduled_arrival_seconds": 4500
+    },
+    {
+      "order_id": "OUT-008",
+      "owner_id": "NOVA",
+      "release_seconds": 2820,
+      "arrival_seconds": 4620,
+      "deadline_seconds": 4920,
+      "dock_id": "DOCK-B",
+      "lines": [
+        {
+          "pallet_id": "PAL-020",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-022",
+          "quantity": 20
+        },
+        {
+          "pallet_id": "PAL-024",
+          "quantity": 20
+        }
+      ],
+      "scheduled_arrival_seconds": 4560
+    }
+  ],
+  "historical_moves": []
+}

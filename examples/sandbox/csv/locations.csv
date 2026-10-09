@@ -1,0 +1,17 @@
+id,x,y,kind,capacity_pallets,temperature
+S-01,65,12,storage,4,ambient
+S-02,90,12,storage,4,ambient
+S-03,115,12,storage,4,ambient
+S-04,65,32,storage,4,ambient
+S-05,90,32,storage,4,ambient
+S-06,115,32,storage,4,ambient
+S-07,65,52,storage,4,ambient
+S-08,90,52,storage,4,ambient
+S-09,115,52,storage,4,ambient
+S-10,65,72,storage,4,ambient
+S-11,90,72,storage,4,ambient
+S-12,115,72,storage,4,ambient
+STAGE-A,12,15,staging,4,ambient
+STAGE-B,12,65,staging,4,ambient
+DOOR-A,0,15,dock,1,ambient
+DOOR-B,0,65,dock,1,ambient

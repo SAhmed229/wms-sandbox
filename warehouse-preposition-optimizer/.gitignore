@@ -1,0 +1,46 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# uv
+uv.lock
+!uv.lock
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+*.coveragerc
+
+# ML artifacts — trained models should not be committed to git.
+# Store in object storage (S3, GCS) or a model registry instead.
+models/*.pkl
+models/*.lgbm
+models/*.onnx
+data/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

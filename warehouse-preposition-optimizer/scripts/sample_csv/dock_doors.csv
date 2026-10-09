@@ -1,0 +1,5 @@
+dock_door,x,y,description
+1,10.00,0.00,"West dock — ambient, high-velocity outbound"
+2,40.00,0.00,Left-centre dock — ambient general outbound
+3,70.00,0.00,Right-centre dock — cold chain carrier lane
+4,100.00,0.00,"East dock — ambient, hazmat-approved carrier lane"

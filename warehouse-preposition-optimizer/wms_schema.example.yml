@@ -1,0 +1,57 @@
+# wms_schema.yml — customer WMS schema mapping
+#
+# How to use:
+#   1. Copy this file to `wms_schema.yml` at the project root.
+#   2. Override only the table or column names whose names differ in YOUR WMS.
+#      Anything you don't override falls back to the canonical name (matching
+#      `scripts/init_db.sql`).
+#   3. Point at it in `config.yml`:
+#        wms:
+#          schema_path: wms_schema.yml
+#   4. Restart the service. SQL queries now use your column names; the rest
+#      of the codebase keeps working unchanged.
+#
+# Example below: a hypothetical 3PL whose tables and a few columns differ.
+
+tables:
+  locations: warehouse_bins
+  inventory_positions: stock_levels
+  carrier_appointments: dock_schedule
+  outbound_orders: ship_orders
+  order_lines: ship_order_lines
+  # skus: omitted -> defaults to "skus"
+
+columns:
+  locations:
+    location_id: bin_id
+    x: bin_x_m
+    y: bin_y_m
+    temperature_zone: temp_class
+    is_staging: is_dock_lane
+    nearest_dock_door: assigned_door
+    # other location columns omitted -> default names used
+
+  inventory_positions:
+    location_id: bin_id        # foreign key matches the renamed locations PK
+    sku_id: item_code
+
+  skus:
+    sku_id: item_code
+    description: item_desc
+    hazmat_class: un_hazmat_code
+    abc_class: velocity_band
+
+  outbound_orders:
+    order_id: shipment_id
+    appointment_id: dock_appt_id
+    cutoff_time: cut_off_at
+
+  order_lines:
+    order_id: shipment_id
+    sku_id: item_code
+
+  carrier_appointments:
+    appointment_id: dock_appt_id
+    dock_door: door_number
+    scheduled_arrival: planned_arrival_utc
+    scheduled_departure: planned_departure_utc

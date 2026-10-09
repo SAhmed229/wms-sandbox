@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Warehouse simulation</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to results</a>
+  <header class="app-header">
+    <div><h1>Warehouse simulation</h1><p>Outbound staging and loading</p></div>
+    <div class="header-context"><strong id="facility-context">Loading dataset…</strong><span>Local sandbox · recommendations only</span></div>
+  </header>
+
+  <div class="workspace">
+    <aside class="setup-panel" aria-label="Data and scenario setup">
+      <section class="dataset-overview">
+        <div class="section-heading"><h2>Dataset</h2><span id="dataset-source">Demo</span></div>
+        <strong class="facility-name" id="facility-name">Loading demo…</strong>
+        <p id="facility-time" class="muted">Preparing sample data</p>
+        <dl class="dataset-stats" id="dataset-stats"><div><dt>Pallets</dt><dd>—</dd></div><div><dt>Orders</dt><dd>—</dd></div><div><dt>Docks</dt><dd>—</dd></div></dl>
+        <div class="dataset-actions"><button class="button secondary" id="demo-button" type="button">Load demo</button><button class="button secondary" id="change-data-button" type="button">Import data</button></div>
+      </section>
+
+      <form id="scenario-form">
+        <div class="section-heading"><h2>Scenario settings</h2></div>
+        <p class="section-description">The baseline and proposed policy use the same equipment and task times.</p>
+        <fieldset><legend>Equipment and task times</legend>
+          <div class="field"><label for="forklift-count">Available forklifts</label><div class="number-control"><button type="button" data-step="-1" aria-label="Remove one forklift">−</button><input id="forklift-count" name="forklift_count" type="number" min="1" max="20" value="3" required><button type="button" data-step="1" aria-label="Add one forklift">+</button></div></div>
+          <div class="field"><label for="speed">Travel speed <span>m/s</span></label><input id="speed" name="speed_mps" type="number" min="0.2" max="8" step="any" value="2" required></div>
+          <div class="field"><label for="handling">Pallet handling <span>seconds</span></label><input id="handling" name="handling_seconds" type="number" min="0" max="300" step="any" value="30" required></div>
+          <div class="field"><label for="loading">Loading per visit <span>seconds</span></label><input id="loading" name="loading_seconds" type="number" min="0" max="300" step="any" value="25" required></div>
+        </fieldset>
+        <fieldset><legend>Recommendation policy</legend>
+          <div class="field"><label for="lookahead">Staging lookahead <span>minutes</span></label><input id="lookahead" name="lookahead_minutes" type="number" min="1" max="180" step="any" value="30" required><output for="lookahead" id="lookahead-output" class="visually-hidden">30 min</output></div>
+          <div class="field"><label for="adoption">Recommendations accepted <span>%</span></label><input id="adoption" name="adoption_percent" type="number" min="0" max="100" step="any" value="100" required><output for="adoption" id="adoption-output" class="visually-hidden">100%</output></div>
+          <p class="field-help">Only released orders are visible to the policy. Acceptance uses a repeatable random seed.</p>
+        </fieldset>
+        <details class="advanced"><summary>Additional settings</summary><div class="field"><label for="min-optimizer-score">Minimum optimizer score <span>V(m), unitless</span></label><input id="min-optimizer-score" name="min_optimizer_score" type="number" min="0" max="100" step="any" value="0.1" required></div><div class="field"><label for="min-benefit">Minimum travel saving <span>seconds</span></label><input id="min-benefit" name="min_benefit_seconds" type="number" min="0" max="600" step="any" value="5" required></div><div class="field"><label for="seed">Random seed</label><input id="seed" name="seed" type="number" min="0" max="2147483647" value="42" required></div><p class="field-help">The optimizer score ranks candidates. The travel-saving threshold is an additional replay guard.</p></details>
+        <button type="submit" class="button primary run-button" id="run-button">Run comparison</button>
+        <p class="scope-note">This sandbox produces recommendations. It does not connect to a WMS or change warehouse operations.</p>
+      </form>
+    </aside>
+
+    <main id="main-content">
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+      <nav class="tab-list" role="tablist" aria-label="Simulation workspace">
+        <button id="results-tab" role="tab" aria-selected="true" aria-controls="results-view" data-tab="results" tabindex="0">Results</button>
+        <button id="replay-tab" role="tab" aria-selected="false" aria-controls="replay-view" data-tab="replay" tabindex="-1">Replay</button>
+        <button id="recommendations-tab" role="tab" aria-selected="false" aria-controls="recommendations-view" data-tab="recommendations" tabindex="-1">Recommendations</button>
+        <button id="model-tab" role="tab" aria-selected="false" aria-controls="model-view" data-tab="model" tabindex="-1">Model &amp; data</button>
+      </nav>
+
+      <section id="results-view" class="tab-view" role="tabpanel" aria-labelledby="results-tab" tabindex="0">
+        <div class="view-heading"><div><h2>Policy comparison</h2><p id="optimizer-policy" class="policy-indicator">Original optimizer · Phase 1</p><p id="result-caption">Demo data is ready. Review the scenario settings, then run a comparison.</p></div><button class="button secondary" id="export-json" type="button" disabled>Download full results</button></div>
+        <section class="panel" aria-label="Comparison metrics">
+          <div class="table-scroll"><table class="comparison-table"><thead><tr><th>Measure</th><th id="baseline-label" class="numeric">Current policy model</th><th class="numeric">With recommendations</th><th class="numeric">Difference</th></tr></thead><tbody id="comparison-body"><tr><td colspan="4" class="empty-table"><strong>No comparison has been run.</strong><span>Use the demo or import inventory, locations, forklifts and outbound orders, then select Run comparison.</span></td></tr></tbody></table></div>
+          <p class="table-note">Dwell is time from arrival to departure. Equipment busy time includes modeled travel, handling and loading. Results are simulation estimates.</p>
+          <p id="historical-labor-note" class="warning-inline" hidden>Historical reposition work is unmeasured. Travel and equipment time exclude that work in both branches.</p>
+        </section>
+        <section class="panel shipment-panel" aria-labelledby="shipments-heading"><div class="panel-heading"><div><h3 id="shipments-heading">Shipment outcomes</h3><p>Dwell and departure status for each shipment or grouped appointment.</p></div><div class="chart-legend"><span><i class="baseline-key"></i> Baseline</span><span><i class="proposed-key"></i> Proposed</span></div></div><div class="table-scroll"><table class="shipment-table"><thead><tr><th>Shipment / appointment</th><th>Dock</th><th>Actual arrival</th><th>Dwell comparison</th><th class="numeric">Baseline dwell</th><th class="numeric">Proposed dwell</th><th class="numeric">Difference</th><th>Proposed status</th></tr></thead><tbody id="shipments-body"><tr><td colspan="8" class="empty-table">Run a comparison to see shipment outcomes.</td></tr></tbody></table></div><p class="table-note">Times in tables and replay are elapsed from the dataset start. Appointment IDs combine orders sharing one truck visit.</p></section>
+      </section>
+
+      <section id="replay-view" class="tab-view" role="tabpanel" aria-labelledby="replay-tab" tabindex="0" hidden>
+        <div class="view-heading"><div><h2 id="replay-heading">Warehouse replay</h2><p id="replay-subtitle">Initial inventory and equipment positions. Run a comparison to replay events.</p></div><div class="segmented" aria-label="Replay branch"><button id="baseline-toggle" class="active" type="button" aria-pressed="true">Current policy</button><button id="proposed-toggle" type="button" aria-pressed="false">With recommendations</button></div></div>
+        <section class="panel replay-panel"><div class="map-toolbar"><span id="map-status">Initial state</span><div class="map-key"><span><i class="key-storage"></i>Storage</span><span><i class="key-staging"></i>Staging</span><span><i class="key-dock"></i>Dock</span><span><i class="key-forklift"></i>Forklift</span></div></div><div class="map-wrapper"><svg id="warehouse-map" role="img" aria-label="Warehouse layout" viewBox="0 0 960 380"></svg><div class="map-empty" id="map-empty" hidden>Load a dataset to inspect its warehouse layout.</div></div><div class="timeline-controls"><button class="button primary play-button" id="play-button" type="button" aria-label="Play replay" disabled>Play</button><div class="timeline-clock"><strong id="timeline-time">00:00:00</strong><span id="timeline-duration">/ 00:00:00</span></div><input id="timeline-slider" type="range" min="0" max="1" step="1" value="0" aria-label="Replay time" disabled><label class="playback-label" for="playback-speed">Speed</label><select id="playback-speed"><option value="30">30×</option><option value="120" selected>120×</option><option value="600">600×</option></select><button class="button secondary" id="reset-replay" type="button" disabled>Reset</button></div><div class="replay-event"><span id="current-event">No replay events yet.</span><span id="event-counter"></span></div></section>
+        <p class="section-description">Routes use Manhattan distance between locations. Congestion, aisle restrictions and equipment downtime are not modeled. The layout is schematic.</p>
+      </section>
+
+      <section id="recommendations-view" class="tab-view" role="tabpanel" aria-labelledby="recommendations-tab" tabindex="0" hidden>
+        <div class="view-heading"><div><h2>Staging recommendations <span id="suggestion-count" class="heading-count">0</span></h2><p id="recommendations-summary">Run a comparison to generate recommendations.</p></div><button class="button secondary" id="export-csv" type="button" disabled>Download recommendations CSV</button></div>
+        <section class="panel"><div class="table-scroll"><table class="suggestions-table"><thead><tr><th>Elapsed time</th><th>Pallet / order</th><th>Location change</th><th class="numeric">Optimizer V(m)</th><th class="numeric">Load travel saved</th><th class="numeric">Staging task cost</th><th>Acceptance</th></tr></thead><tbody id="suggestions-body"><tr><td colspan="7" class="empty-table">Run a comparison to generate staging recommendations.</td></tr></tbody></table></div><p class="table-note">Select a row to inspect that time in Replay. Expand the reason or score components for details. V(m) is the original optimizer's unitless ranking score. Staging task cost is the full simulated task, including the forklift's empty trip to the pallet.</p></section>
+      </section>
+
+      <section id="model-view" class="tab-view" role="tabpanel" aria-labelledby="model-tab" tabindex="0" hidden>
+        <div class="view-heading"><div><h2>Model and source data</h2><p>Import authorized exports and check the assumptions behind the comparison.</p></div></div>
+        <div class="model-data-grid">
+          <section class="panel import-panel"><div class="panel-heading"><h3>Import warehouse data</h3></div><div class="panel-content"><label class="upload-zone" for="dataset-files"><strong>Choose JSON or CSV files</strong><span>A dataset JSON, an exported run JSON, or the CSV tables together. Maximum request size: 5 MB.</span><span class="upload-label">Select files</span></label><input id="dataset-files" type="file" accept=".json,.csv,application/json,text/csv" multiple class="visually-hidden"><details class="csv-options"><summary>CSV facility details</summary><label for="csv-facility-name">Facility name<input id="csv-facility-name" type="text" placeholder="My warehouse" maxlength="120"></label><label for="csv-start-time">Dataset start with time zone<input id="csv-start-time" type="text" placeholder="2026-10-08T08:00:00-04:00" maxlength="50"></label><p class="field-help">Optional for CSV. JSON provides these fields in its facility object.</p></details><button class="button secondary" id="template-button" type="button">Download CSV templates</button><p class="field-help">Files are processed by the local server and saved with each run on this computer.</p></div></section>
+          <section class="panel"><div class="panel-heading"><h3>Current dataset</h3></div><div class="table-scroll"><table class="data-summary-table"><tbody id="data-summary-body"><tr><td class="empty-table">Loading dataset…</td></tr></tbody></table></div></section>
+        </div>
+        <section class="panel"><div class="panel-heading"><h3>Required inputs</h3></div><div class="table-scroll"><table class="schema-table"><thead><tr><th>Table</th><th>Purpose</th><th>Key fields</th></tr></thead><tbody><tr><td>locations.csv</td><td>Warehouse layout and capacity</td><td>id, x, y, kind, capacity_pallets</td></tr><tr><td>docks.csv</td><td>Dock and staging relationships</td><td>id, location_id, staging_location_id</td></tr><tr><td>forklifts.csv</td><td>Equipment starting positions</td><td>id, start_location_id</td></tr><tr><td>inventory.csv</td><td>One record per physical pallet</td><td>pallet_id, sku_id, owner_id, location_id, quantity</td></tr><tr><td>orders.csv</td><td>One row per requested pallet line</td><td>order_id, owner_id, dock_id, pallet_id, quantity, release_seconds, scheduled_arrival_seconds, arrival_seconds, deadline_seconds</td></tr><tr><td>historical_moves.csv</td><td>Optional completed relocations</td><td>at_seconds, pallet_id, to_location_id</td></tr></tbody></table></div><div class="panel-content schema-notes"><p>Coordinates are metres. Times are seconds after facility.start_time. Each pallet has its own ID; SKU IDs can repeat.</p><p><strong>Planning and observations:</strong> scheduled_arrival_seconds is the arrival estimate available to the policy. arrival_seconds is the actual arrival. observed_departure_seconds is used for calibration. appointment_id groups orders loaded on one truck visit. Optional priority is an integer from 1 to 10 (default 1) and affects the original optimizer's urgency weight.</p><p>Temperature is optional on locations and inventory, and defaults to ambient. Ownership, temperatures, capacity, references and requested quantities are validated during import.</p></div></section>
+        <section class="panel model-panel"><div class="panel-heading"><h3>Model interpretation</h3></div><div class="panel-content policy-source-note"><h4>Recommendation policy</h4><p id="optimizer-source">Original optimizer · Phase 1. The copied PrePositionScheduler generates candidates using MovementScorer and FeasibilityEngine. The replay harness models their operating consequences.</p></div><div class="panel-content model-grid"><div><h4 id="model-baseline">Current policy model</h4><p id="model-baseline-text">Loading begins after truck arrival. Original optimizer recommendations use released orders and available staging capacity.</p></div><div><h4 id="calibration-value">Not calibrated</h4><p id="calibration-text">Supply observed departure times to compare baseline estimates with historical results.</p></div></div><div id="warnings-list" class="warnings-list"></div><details class="assumptions"><summary>Simulation assumptions</summary><ul id="assumptions-list"><li>Results estimate a counterfactual. They are not proof of actual savings.</li><li>No WMS writeback or equipment dispatch is available.</li></ul></details></section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

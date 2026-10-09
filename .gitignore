@@ -1,0 +1,20 @@
+# Local datasets and replay results
+runs/
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+.venv-sandbox/
+.venv/
+venv/
+.claude/
+# Python and test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+# OS/editor files
+.DS_Store
+.idea/
+.vscode/
