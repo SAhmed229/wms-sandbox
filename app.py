@@ -13,6 +13,11 @@ app.config["MAX_CONTENT_LENGTH"] = 4_000_000
 
 class HostedHandler(SandboxHandler):
     def _send(self, payload, status=200, content_type="application/json; charset=utf-8", filename=None):
+        if content_type.startswith("text/html"):
+            payload = payload.decode("utf-8") if isinstance(payload, bytes) else payload
+            payload = payload.replace("Local sandbox · recommendations only", "Hosted sandbox · recommendations only")
+            payload = payload.replace("Maximum request size: 5 MB.", "Maximum request size: 4 MB.")
+            payload = payload.replace("Files are processed by the local server and saved with each run on this computer.", "Files are processed on the hosted server for this request. Runs are not saved there. Download results before refreshing or closing this page.")
         if isinstance(payload, (dict, list)):
             payload = json_bytes(payload)
         self.response = Response(payload, status=status, content_type=content_type)

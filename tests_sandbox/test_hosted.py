@@ -12,6 +12,9 @@ class HostedUserFlowTests(unittest.TestCase):
     def test_demo_run_and_reimport_without_server_storage(self):
         for path in ["/", "/app.js", "/styles.css", "/api/health", "/api/templates"]:
             self.assertEqual(self.client.get(path).status_code, 200, path)
+        page = self.client.get("/").get_data(as_text=True)
+        self.assertIn("Hosted sandbox", page)
+        self.assertNotIn("saved with each run on this computer", page)
         demo = self.client.get("/api/demo").get_json()
         with patch("warehouse_sandbox.server.tempfile.NamedTemporaryFile", side_effect=AssertionError("No hosted file writes")):
             response = self.client.post("/api/run", json={"dataset": demo, "settings": {}})
