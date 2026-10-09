@@ -79,7 +79,7 @@ The desktop copy of src/scoring/value_function.py has two intentional replay ada
 
 ## Vercel hosting
 
-Import this repository with root directory `.` and the Flask framework preset. The root `app.py`, `requirements.txt`, `.python-version`, and `vercel.json` configure the hosted API and UI. Git pushes redeploy the connected project.
+Import this repository with root directory `.` and the Other framework preset. The `api/index.py` entrypoint, root `app.py`, `requirements.txt`, `.python-version`, and `vercel.json` configure the hosted API and UI. Git pushes redeploy the connected project.
 
 The hosted app executes the same original Phase 1 optimizer. Runs remain in the current page; download JSON or CSV before refreshing or closing. JSON can be imported again to rerun a scenario. There is no shared server run history or persistent uploaded-data storage. Hosted uploads are limited to 4 MB. The desktop launcher continues saving results locally.
 
